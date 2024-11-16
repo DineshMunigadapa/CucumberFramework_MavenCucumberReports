@@ -25,7 +25,6 @@ steps:
     mavenVersionOption: 'Default'
     jdkArchitectureOption: "x64"
     publishJUnitResults: true
-    testResultsFiles: "cucumber.html"
     goals: "clean verify"
     mavenAuthenticateFeed: false
     effectivePomSkip: false
@@ -42,4 +41,4 @@ steps:
 - task: publishhtmlreport@1
   displayName: 'HTML Report'
   inputs:
-    reportDir: 'target/cucumber-report-html/cucumber-html-reports/feature-overview.html'
+    reportDir: 'target/cucumber.html'
