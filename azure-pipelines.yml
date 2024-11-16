@@ -1,0 +1,45 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+strategy:
+  matrix:
+    jdk11_windows:
+      imageName: "windows-latest"
+      jdkVersion: "17"
+  maxParallel: 2
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: $(jdkVersion)
+    mavenVersionOption: 'Default'
+    jdkArchitectureOption: "x64"
+    publishJUnitResults: true
+    testResultsFiles: "cucumber.html"
+    goals: "test"
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Pipeline Artifact'
+  inputs:
+    targetPath: 'target'
+    artifact: 'targetfolderdetails'
+    publishLocation: 'pipeline'
+
+
+- task: publishhtmlreport@1
+  displayName: 'HTML Report'
+  inputs:
+    reportDir: 'target/cucumber-report-html/cucumber-html-reports/feature-overview.html'
